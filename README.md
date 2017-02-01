@@ -25,4 +25,34 @@ There are only a few REST methods provided:
 * `/send` takes a parameter, `msg`, which contains the message text to publish
 * `/fetch` returns a message, and deletes it from the topic
 
+## A couple of interesting aspects
+* When I attempted to `cf push` this app, it would not start up.  That led to some research, and it
+  seems the issue was that the Google API was pulling in the servlet 2.5 API, which was missing
+  a method found in the later 3.x API.  The solution to that was to exclude that servlet API within
+  the POM:
+```
+  <dependency>
+    <groupId>com.google.cloud</groupId>
+    <artifactId>google-cloud-pubsub</artifactId>
+    <version>${google-cloud-pubsub.version}</version>
+    <exclusions>
+      <exclusion>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+      </exclusion>
+    </exclusions>
+  </dependency>
+```
+
+* The intent of this app is to bind to the PubSub service, via the GCP tile.  The values within the
+  resulting `VCAP_SERVICES` environment variable are exposed as properties in Spring, accessible
+  like this, where that nested `${pubsub.instance.name}` corresponds to the name given to the
+  service instance created in PCF:
+```
+  @Bean
+  public PubSub pubSubCloud(
+    @Value("${vcap.services.${pubsub.instance.name}.credentials.PrivateKeyData}") String privateKeyData,
+    @Value("${vcap.services.${pubsub.instance.name}.credentials.ProjectId}") String projectId
+  ) throws Exception {
+```
 
