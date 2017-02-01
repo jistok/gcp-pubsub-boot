@@ -16,3 +16,10 @@ service, create a subscription, publish and retrieve messages.
    * Binds your app to this PubSub service instance, with "admin" rights
    * Starts the app
 
+## How to use the app
+There are only a few REST methods provided:
+* `/topics` will just return a comma separated list of topic names (TODO: JSON-ify this)
+* `/send` takes a parameter, `msg`, which contains the message text to publish
+* `/fetch` returns a message, and deletes it from the topic
+
+
