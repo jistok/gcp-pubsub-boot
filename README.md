@@ -25,7 +25,7 @@ There are only a few REST methods provided:
 * `/send` takes a parameter, `msg`, which contains the message text to publish
 * `/fetch` returns a message, and deletes it from the topic
 
-## A couple of interesting aspects
+## Worth noting
 * When I attempted to `cf push` this app, it would not start up.  That led to some research, and it
   seems the issue was that the Google API was pulling in the servlet 2.5 API, which was missing
   a method found in the later 3.x API.  The solution to that was to exclude that servlet API within
@@ -55,4 +55,10 @@ There are only a few REST methods provided:
     @Value("${vcap.services.${pubsub.instance.name}.credentials.ProjectId}") String projectId
   ) throws Exception {
 ```
+
+* It appears that a subsription name cannot contain hyphens.  I had chosen a name with hyphens, and
+  wasn't seeing it appear on the list of subscriptions, and I was unable to pull out messages.  When
+  I changed to one without hyphens, things worked normally (refer to `pubsub.subscription.name` in
+  [application.properties](./src/main/resources/application.properties)).
+
 
