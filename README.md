@@ -5,6 +5,9 @@
 This is meant to illustrate how to bind a Spring Boot app to an instance of the Google PubSub
 service, create a subscription, publish and retrieve messages.
 
+## Prerequisite
+Install the GCP tile into your PCF environment, per [this procedure](https://docs.pivotal.io/pivotalcf/1-8/customizing/gcp.html)
+
 ## Steps to deploy and run this
 1. Edit the [application.properties](./src/main/resources/application.properties), if you like, but any
    change to `pubsub.instance.name` will also have to be applied to the `service_instance` variable
